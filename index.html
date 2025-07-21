@@ -1,44 +1,41 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Access Notes</title>
-  <script>
-    // Check if the visitor already submitted
-    if (localStorage.getItem("visited") === "yes") {
-      window.location.href = "https://sites.google.com/view/gabmb7/home";
-    }
+  <head>
+    <script>
+      function submitForm() {
+        const name = document.getElementById("name").value;
+        const email = document.getElementById("email").value;
 
-    function submitForm() {
-      const name = document.getElementById("name").value.trim();
-      const email = document.getElementById("email").value.trim();
+        // Save to localStorage
+        localStorage.setItem("visited", "yes");
 
-      if (!name) {
-        alert("Please enter your name.");
-        return;
+        // Send data to Google Form
+        fetch("https://docs.google.com/forms/d/e/1FAIpQLSd0FsWPRvvMDBPt6fBepEwTvMna8-XrNP1OiA65y3szz1hQGg/formResponse", {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: entry.1969771097=${encodeURIComponent(name)}&entry.1191981996=${encodeURIComponent(email)}
+        }).then(() => {
+          // After data is sent, redirect
+          window.location.href = "https://sites.google.com/view/gabmb7/home";
+        }).catch(() => {
+          // Redirect anyway even if fetch fails silently (due to no-cors)
+          window.location.href = "https://sites.google.com/view/gabmb7/home";
+        });
       }
 
-      // Submit to Google Form
-      fetch("https://docs.google.com/forms/d/e/1FAIpQLSd0FsWPRvvMDBPt6fBepEwTvMna8-XrNP1OiA65y3szz1hQGg/formResponse", {
-        method: "POST",
-        mode: "no-cors",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: entry.1969771097=${encodeURIComponent(name)}&entry.1191981996=${encodeURIComponent(email)}
-      });
-
-      // Mark as visited
-      localStorage.setItem("visited", "yes");
-
-      // Redirect to your Google Site
-      window.location.href = "https://sites.google.com/view/gabmb7/home";
-    }
-  </script>
-</head>
-<body>
-  <h2>Enter your details to access the notes:</h2>
-  <input type="text" id="name" placeholder="Your name" required><br><br>
-  <input type="email" id="email" placeholder="Your email (optional)"><br><br>
-  <button onclick="submitForm()">Access Notes</button>
-</body>
+      // Auto-redirect if already visited
+      if (localStorage.getItem("visited") === "yes") {
+        window.location.href = "https://sites.google.com/view/gabmb7/home";
+      }
+    </script>
+  </head>
+  <body>
+    <h2>Enter your details to access the notes:</h2>
+    <input type="text" id="name" placeholder="Your name" required><br><br>
+    <input type="email" id="email" placeholder="Your email (optional)"><br><br>
+    <button onclick="submitForm()">Access Notes</button>
+  </body>
 </html>
